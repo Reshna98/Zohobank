@@ -11320,19 +11320,14 @@ def delete_bank(request, bank_id):
         bank.delete()
     return redirect('bank_home')  
 
-# def bank_listout(request,id):
-#     cp= company_details.objects.get(user = request.user)
-#     bank= Bankcreation.objects.filter(user=request.user)
-#     banks =get_object_or_404(Bankcreation, id=id)      
-#     bankc=transactions.objects.filter(user=request.user,bank=banks)
-#     bank_balance = sum([transaction.amount for transaction in bankc])
-#     bank_balances = []
-#     for bank in bank:
-#         transactions_for_bank = transactions.objects.filter(user=request.user, bank=bank)
-#         balance = sum([transaction.amount for transaction in transactions_for_bank])
-#         bank_balances.append((bank, balance))
+def check_duplicate_bank(request):
+    name = request.GET.get('name')
+    ac_no = request.GET.get('ac_no')
+    user = request.user
 
-#     return render(request,'banklistout.html', {'company':cp, 'bank':bank ,'banks':banks,'bankc':bankc,'bank_balance':bank_balance,'bank_balances': bank_balances})   
+    existing_bank = Bankcreation.objects.filter(user=user, name=name, ac_no=ac_no).exists()
+
+    return JsonResponse({'is_duplicate': existing_bank})
 
 def bank_listout(request, id):
     cp = company_details.objects.get(user=request.user)

@@ -494,7 +494,7 @@ urlpatterns = [
     
     path('change_vendor_status/<int:pk>', views.change_vendor_status, name='change_vendor_status'),
     
-    #reshna-banking    
+    #reshna-banking########################################################################
     path('bank_home', views.bank_home, name='bank_home'),
     path('create_bank', views.create_bank, name='create_bank'),
     path('edit_bank/<int:bank_id>', views.edit_bank, name='edit_bank'),
@@ -508,7 +508,8 @@ urlpatterns = [
     path('view_namedes/<int:id>/', views.view_namedes, name='view_namedes'),
     path('bank_pdf/<int:id>/', views.bank_pdf, name='bank_pdf'),
     path('bank_status/<int:id>/', views.bank_status, name='bank_status'),
-    
+    path('check_duplicate_bank/', views.check_duplicate_bank, name='check_duplicate_bank'),#new
+    # ###############################################################################################3
     path('load_balance_sheet/',views.load_balance_sheet,name='load_balance_sheet'),
     path('load_horizontal_balance_sheet/',views.load_horizontal_balance_sheet,name='load_horizontal_balance_sheet'),
     path('load_customize_report_bs/',views.load_customize_report_bs,name='load_customize_report_bs'),

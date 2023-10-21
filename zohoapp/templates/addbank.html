@@ -166,9 +166,27 @@
               <input type="text" class="form-control text-dark bg-light" id="ifsc" name="ifsc">
             </div>
           </div>
-          <input type="submit" class="btn save_btn mt-2 py-2 rounded-pill text-grey  my-4 mx-2" style="width: 200px; text-align: center ;" value="SAVE" id="save">
-          <input class="btn  save_btn  rounded-pill text-grey  my-4 mt-2 py-2" type="reset" value="RESET">
+          <input type="submit" class="btn save_btn mt-2 py-2 rounded-pill text-grey  my-4 mx-2" style="width: 200px; text-align: center ;" value="SAVE" id="save" onclick="checkDuplicateBank()">
+          <input class="btn  save_btn  rounded-pill text-grey  my-4 mt-2 py-2" type="reset" value="CANCEL">
         </div>
     </form>
-
+    <script>
+      function checkDuplicateBank() {
+          var name = document.getElementById('name').value;
+          var ac_no = document.getElementById('ac_no').value;
+          var isDuplicate = false;
+      
+          // Add your logic to check for duplicates (you may need to fetch data from the server)
+          // If a duplicate is found, set isDuplicate to true
+      
+          if (isDuplicate) {
+              alert('Bank with the same name and account number already exists.');
+              return false; // Prevent form submission
+          }
+      
+          return true; // Allow form submission
+      }
+      </script>
+      
+      
 {%endblock%}
