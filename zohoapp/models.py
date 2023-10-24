@@ -300,7 +300,20 @@ class Bankcreation(models.Model):
     date = models.DateField(null=True, blank=True)
     document=models.FileField(upload_to='bank/',null=True,blank=True)
     status= models.TextField(default='Active')
-    
+    balance=models.FloatField(null=True, blank=True)
+
+class transactions(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    bank=models.ForeignKey(Bankcreation, on_delete=models.CASCADE,null=True, blank=True)
+    fromB=models.CharField(max_length=220,default='', null=True, blank=True)
+    toB=models.CharField(max_length=220,default='', null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    description=models.CharField(max_length=220,default='', null=True, blank=True)
+    type=models.CharField(max_length=220,default='', null=True, blank=True)
+    adjtype=models.CharField(max_length=220,default='', null=True, blank=True)
+    adjacname=models.CharField(max_length=220,default='', null=True, blank=True)   
+    balance=models.FloatField(null=True, blank=True)
     
 class invoice(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
@@ -1225,17 +1238,17 @@ class customer_comments_table(models.Model):
 
     
     
-class transactions(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    bank=models.ForeignKey(Bankcreation, on_delete=models.CASCADE,null=True, blank=True)
-    fromB=models.CharField(max_length=220,default='', null=True, blank=True)
-    toB=models.CharField(max_length=220,default='', null=True, blank=True)
-    amount = models.FloatField(null=True, blank=True)
-    date = models.DateField(null=True, blank=True)
-    description=models.CharField(max_length=220,default='', null=True, blank=True)
-    type=models.CharField(max_length=220,default='', null=True, blank=True)
-    adjtype=models.CharField(max_length=220,default='', null=True, blank=True)
-    adjacname=models.CharField(max_length=220,default='', null=True, blank=True)
+# class transactions(models.Model):
+#     user=models.ForeignKey(User,on_delete=models.CASCADE)
+#     bank=models.ForeignKey(Bankcreation, on_delete=models.CASCADE,null=True, blank=True)
+#     fromB=models.CharField(max_length=220,default='', null=True, blank=True)
+#     toB=models.CharField(max_length=220,default='', null=True, blank=True)
+#     amount = models.FloatField(null=True, blank=True)
+#     date = models.DateField(null=True, blank=True)
+#     description=models.CharField(max_length=220,default='', null=True, blank=True)
+#     type=models.CharField(max_length=220,default='', null=True, blank=True)
+#     adjtype=models.CharField(max_length=220,default='', null=True, blank=True)
+#     adjacname=models.CharField(max_length=220,default='', null=True, blank=True)
     
 class Transportation(models.Model):
     method = models.CharField(max_length=100)
