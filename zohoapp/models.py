@@ -295,12 +295,12 @@ class Bankcreation(models.Model):
     branch = models.CharField(max_length=220,default='', null=True, blank=True)
     ac_no = models.CharField(max_length=220,default='', null=True, blank=True)
     ifsc = models.CharField(max_length=220,default='', null=True, blank=True)
-    opn_bal =models.FloatField(null=True, blank=True)
+    opn_bal =models.FloatField(null=True, blank=True,default=0.0)
     bal_type=models.CharField(max_length=220,default='', null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     document=models.FileField(upload_to='bank/',null=True,blank=True)
     status= models.TextField(default='Active')
-    balance=models.FloatField(null=True, blank=True)
+    balance=models.FloatField(default=0.0,null=True, blank=True)
 
 class transactions(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -312,8 +312,9 @@ class transactions(models.Model):
     description=models.CharField(max_length=220,default='', null=True, blank=True)
     type=models.CharField(max_length=220,default='', null=True, blank=True)
     adjtype=models.CharField(max_length=220,default='', null=True, blank=True)
-    adjacname=models.CharField(max_length=220,default='', null=True, blank=True)   
-    balance=models.FloatField(null=True, blank=True)
+    adjacname=models.CharField(max_length=220,default='', null=True, blank=True) 
+    name=models.CharField(max_length=220,default='', null=True, blank=True) 
+    balance=models.FloatField(default=0.0,null=True, blank=True)
     
 class invoice(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)

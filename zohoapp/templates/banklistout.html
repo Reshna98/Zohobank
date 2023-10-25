@@ -257,11 +257,11 @@
     
                   </thead>
                   <tbody>
-                    {% for bank_item, balance in bank_balances %}
+                    {% for bank in banks_list %}
                     <tr>
-                        <td><a class="text-white" href="{% url 'bank_listout' bank_item.id %}">
-                            {{ bank_item.name }} 
-                            <span class="d-flex justify-content-end align-items-start">&#8377;{{ balance }}</span>
+                        <td><a class="text-white" href="{% url 'bank_listout' bank.id %}">
+                            {{ bank.name }} 
+                            <span class="d-flex justify-content-end align-items-start">&#8377;{{ bank.balance }}</span>
                         </a></td>
                     </tr>
                     {% endfor %}
@@ -394,7 +394,7 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-6 p-2 d-flex justify-content-end align-items-start" style="width: 190px;">
                  
-                    <h4>Balance:&#8377;{{bank_balance}}</h4>
+                    <h4>Balance:&#8377;{{selected_bank.balance}}</h4>
                  
                 </div>
           
@@ -413,7 +413,7 @@
                         </div>
                         <div class="modal-body" style="background: rgb(32, 35, 37);">
                             <div class="card p-3 m-3">
-                              <form action="{% url 'banktocash' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
+                              <form action="{% url 'bank_to_cash_transfer' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
 
                                 
                                     {%csrf_token%}
@@ -485,7 +485,7 @@
                   var selectedValue = this.value;
                   if (selectedValue === 'Bank To Cash Transfer') {
                       $('#bankToCashTransferModal').modal('show');
-                      document.getElementById('selectedType').value = selectedValue;
+                      // document.getElementById('selectedType').value = selectedValue;
                   } else {
                       $('#bankToCashTransferModal').modal('hide');
                   }
@@ -508,7 +508,7 @@
                         </div>
                         <div class="modal-body" style="background: rgb(32, 35, 37);">
                             <div class="card p-3 m-3">
-                              <form action="{% url 'banktocash' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
+                              <form action="{% url 'cash_to_bank_transfer' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
 
                                 
                                     {%csrf_token%}
@@ -550,7 +550,7 @@
                                                       id="description" placeholder="Max. 500 characters"></textarea>
                                         </div>
                                     </div>
-                                    <input type="hidden" id="selectedTypeC" name="type">
+                                    <!-- <input type="hidden" id="selectedTypeC" name="type"> -->
                                     <div class="row mt-5">
                                       <div class="col-md-4"></div>
                                       <div class="col-md-4">
@@ -580,7 +580,7 @@
                   var selectedValue = this.value;
                   if (selectedValue === 'Cash To Bank Transfer') {
                       $('#cash_to_bank').modal('show');
-                      document.getElementById('selectedTypeC').value = selectedValue;
+                      // document.getElementById('selectedTypeC').value = selectedValue;
                   } else {
                       $('#cash_to_bank').modal('hide');
                   }
@@ -604,7 +604,7 @@
                         </div>
                         <div class="modal-body" style="background: rgb(32, 35, 37);">
                             <div class="card p-3 m-3">
-                              <form action="{% url 'banktocash' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
+                              <form action="{% url 'bank_to_bank_transfer' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
 
                                 
                                     {%csrf_token%}
@@ -705,7 +705,7 @@
           </div>
           <div class="modal-body" style="background: rgb(32, 35, 37);">
               <div class="card p-3 m-3">
-                <form action="{% url 'banktocash' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
+                <form action="{% url 'adjust_bank_balance' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
 
                   
                       {%csrf_token%}
@@ -781,7 +781,7 @@ document.getElementById('selectOption').addEventListener('change', function() {
     var selectedValue = this.value;
     if (selectedValue === 'Adjust Bank Balance') {
         $('#adjbank').modal('show');
-        document.getElementById('selectedTypeA').value = selectedValue;
+        // document.getElementById('selectedTypeA').value = selectedValue;
     } else {
         $('#adjbank').modal('hide');
     }
@@ -873,14 +873,8 @@ location.reload();
                          
                           <td  class="text-white">
                           
-                          <!-- {% if b.type == 'Bank To Bank Transfer' %}
-                          {% if b.amount > 0 %}
-                          From: {{ b.fromB}}
-                          {% else %}
-                          To: {{ b.toB}}
-                          {% endif %}
-                          {% endif %} -->
-                          {{b.display_text}}
+                         
+                          {{b.name}}
                           </td>
                           
                         

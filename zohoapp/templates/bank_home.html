@@ -149,12 +149,13 @@
                                
                                 <th>OPENING BALANCE</th>
                                 <th>BALANCE</th>
+                                <th>STATUS</th>
                             
                             </tr>
                         </thead>
                         <tbody>
                             
-                            {% for bank, balance in bank_balances %}
+                            {% for bank in banks %}
                         
                             <tr>
                             <td><a href="{% url 'bank_listout' bank.id %}">{{bank.name}}</a></td>
@@ -165,7 +166,8 @@
                             <td><a href="{% url 'bank_listout' bank.id %}">{{ bank.ac_no}}</a></td>
                             <td><a href="{% url 'bank_listout' bank.id %}">{{ bank.branch}}</a></td>
                             <td ><a href="{% url 'bank_listout' bank.id %}">&#8377;{{ bank.opn_bal }}</a></td>
-                            <td ><a href="{% url 'bank_listout' bank.id %}">&#8377;{{ balance }}</a></td>
+                            <td ><a href="{% url 'bank_listout' bank.id %}">&#8377;{{bank.balance }}</a></td>
+                            <td ><a href="{% url 'bank_listout' bank.id %}">{{bank.status }}</a></td>
                           
                             </tr>
 
