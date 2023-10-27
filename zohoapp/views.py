@@ -11392,23 +11392,8 @@ def bank_listout(request, id):
 
     selected_bank = get_object_or_404(Bankcreation, id=id)
     transactions_for_selected_bank = transactions.objects.filter(user=request.user, bank=selected_bank)
-    print(transactions_for_selected_bank)
-    # bank_balance = sum([transaction.amount for transaction in transactions_for_selected_bank])
-
-    # for transaction in transactions_for_selected_bank:
-    #         if transaction.type == 'Bank To Bank Transfer':
-    #             if transaction.amount > 0:
-    #                 transaction.display_text = f'From: {transaction.fromB}'
-    #             else:
-    #                 transaction.display_text = f'To: {transaction.toB}'
-    #         else:
-    #             transaction.display_text = '' 
-
-    # bank_balances = []
-    # for bank in banks_list:
-    #     transactions_for_bank = transactions.objects.filter(user=request.user, bank=bank)
-    #     balance = sum([transaction.amount for transaction in transactions_for_bank])
-    #     bank_balances.append((bank, balance))
+    # print(transactions_for_selected_bank)
+    
 
     return render(request, 'banklistout.html', {'company': cp, 'banks_list': banks_list, 'selected_bank': selected_bank,'transactions_for_selected_bank':transactions_for_selected_bank})
 
@@ -11517,7 +11502,7 @@ def banktocash(request, id):
     if request.user.is_authenticated and request.method == 'POST':
         date = request.POST.get('date')
         fromB = request.POST.get('fromB')
-        toB = 'Cash'  # Assuming the destination for bank to cash is 'Cash'
+        toB = 'Cash'  
         amount = float(request.POST.get('amount', 0.0))
         description = request.POST.get('description')
 
@@ -11527,9 +11512,11 @@ def banktocash(request, id):
 
         cash_transaction = transactions(
             user=request.user,
-            fromB=fromB,
+            # fromB=fromB,
+            fromB= from_bank.name,
             toB=toB,
-            amount=-amount,
+            # amount=-amount,
+            amount=amount,
             description=description,
             date=date,
             type='Bank To Cash Transfer',
@@ -11547,13 +11534,13 @@ def banktocash(request, id):
 def cash_to_bank_transfer(request, id):  # new
     if request.user.is_authenticated and request.method == 'POST':
         date = request.POST.get('date')
-        fromB = 'Cash'  # Assuming the source for cash to bank is 'Cash'
-        toB = request.POST.get('toB')  # Retrieve the destination bank account
+        fromB = 'Cash'  
+        toB = request.POST.get('toB') 
         to_bank = Bankcreation.objects.get(id=toB)
         amount = float(request.POST.get('amount', 0.0))
         description = request.POST.get('description')
 
-        to_bank.balance += amount  # Update the balance of the destination bank
+        to_bank.balance += amount 
         to_bank.save()
 
         bank_transaction = transactions(
@@ -11579,54 +11566,48 @@ def cash_to_bank_transfer(request, id):  # new
 def adjust_bank_balance(request, id):#new
     if request.user.is_authenticated and request.method == 'POST':
         date = request.POST.get('date')
-        # fromB = request.POST.get('fromB')
         adjacname = request.POST.get('adjacname')
         amount = float(request.POST.get('amount', 0.0))
         description = request.POST.get('description')
         adjtype = request.POST.get('adjtype')
 
-        # from_bank = Bankcreation.objects.get(id=fromB)
         adj_bank = Bankcreation.objects.get(id=adjacname)
 
         if adjtype == 'Reduce Balance':
-            # from_bank.balance -= amount
+            
             adj_bank.balance -= amount
+            # amount = -amount
         else:
-            # from_bank.balance += amount
+          
             adj_bank.balance += amount
 
-        # from_bank.save()
         adj_bank.save()
 
+        
         if adjtype == 'Reduce Balance':
-            balance = adj_bank.balance + amount
+            balance = adj_bank.balance
         else:
-            balance = adj_bank.balance - amount
-
+            balance = adj_bank.balance
 
         adj_transaction = transactions(
             user=request.user,
-            # fromB=fromB,
+            adjtype=adjtype,
             adjacname=adjacname,
-            # amount=amount,
+            amount=amount,
             description=description,
             date=date,
             type='Adjust Bank Balance',
             bank=adj_bank,
             balance=balance
         )
-        if adjtype == 'Reduce Balance':
-            adj_transaction.amount = -amount  # Set the amount as negative when reducing balance
-        else:
-            adj_transaction.amount = amount  
+
         adj_transaction.save()
 
         return redirect('bank_listout', id=id)
     else:
-            b = Bankcreation.objects.filter(user=request.user)
-            cp = company_details.objects.get(user=request.user)
-            return render(request, 'banklistout.html', {'company': cp, 'bank': b})
-
+        b = Bankcreation.objects.filter(user=request.user)
+        cp = company_details.objects.get(user=request.user)
+        return render(request, 'banklistout.html', {'company': cp, 'bank': b})
 
 def bank_to_bank_transfer(request, id):#new
     if request.user.is_authenticated and request.method == 'POST':
@@ -11649,6 +11630,7 @@ def bank_to_bank_transfer(request, id):#new
             user=request.user,
             fromB=fromB,
             toB=toB,
+            # amount=-amount,
             amount=-amount,
             description=description,
             date=date,
@@ -11683,10 +11665,14 @@ def bank_to_bank_transfer(request, id):#new
 #edit transactions
 def edit_banktocash(request, id):
     if request.user.is_authenticated and request.method == 'POST':
-        date = request.POST.get('date')
-        fromB = request.POST.get('fromB')
-        amount = float(request.POST.get('amount', 0.0))
-        description = request.POST.get('description')
+        date = request.POST.get('datee')
+        fromB = request.POST.get('fromBb')
+        amount = float(request.POST.get('amountt', 0.0))
+        description = request.POST.get('descriptionn')
+        # Update the balance of the source bank account
+        source_bank = Bankcreation.objects.get(id=fromB)
+        source_bank.balance -= amount
+        source_bank.save()
         
         cash_transaction = transactions.objects.get(id=id, type='Bank To Cash Transfer')
 
@@ -11696,18 +11682,16 @@ def edit_banktocash(request, id):
 
         # Update the transaction fields with the new data
         cash_transaction.date = date
-        cash_transaction.fromB = fromB
-        cash_transaction.amount = -amount  # Set the amount as negative
+        cash_transaction.fromB = source_bank.name
+        cash_transaction.amount = amount  # Set the amount as negative
         cash_transaction.description = description
         cash_transaction.balance = cash_transaction.bank.balance
         cash_transaction.save()
+        bank_id = cash_transaction.bank.id
 
-        # Update the balance of the source bank account
-        source_bank = Bankcreation.objects.get(id=fromB)
-        source_bank.balance -= amount
-        source_bank.save()
+        
 
-        return redirect('bank_listout', id=id)
+        return redirect('bank_listout', id= bank_id )
     else:
         b = Bankcreation.objects.filter(user=request.user)
         cp = company_details.objects.get(user=request.user)

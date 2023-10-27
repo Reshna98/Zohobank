@@ -790,87 +790,8 @@ $('#adjbank').modal('hide');
 location.reload();
 });
 </script>
-<!-- edit transactins -->
-<div class="modal fade" id="bankToCashTransferModal">
-  <div class="modal-dialog modal-xl">
-      <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
-          <div class="modal-header " style="background: rgb(32, 35, 37);">
-              <h3 class="m-3 text-uppercase">Bank To Cash Transfer</h3>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body" style="background: rgb(32, 35, 37);">
-              <div class="card p-3 m-3">
-                <form action="{% url 'edit_banktocash' selected_bank.id %}" method="post" class="needs-validation" novalidate autocomplete="off" id="bankToCashTransferForm">
 
-                  
-                      {%csrf_token%}
-                      <div class="row">
-                          <div class="col-md-6">
-                              <label for="fromB">From</label>
-                              <select class="form-control text-dark bg-light form-select" id="fromB" name="fromB">
-                                <option value="">-- Select a Bank --</option>
-                                {% for b in banks_list %}
-                                <option value="{{b.id }}">{{ b.name }}</option>
-                                 {% endfor %}
-                              
-                              </select>
-                            </div>
-                          <div class="col-md-6">
-                              <label for="toB">To</label>
-                              <input type="text" class="form-control text-dark bg-light" id="toB" maxlength="10" name="toB" value="Cash" readonly>
-                          </div>
-                      </div>
-
-                      <div class="row mt-3">
-                          <div class="col-md-6">
-                              <label for="amount">Amount</label>
-                              <input type="number" class="form-control text-dark bg-light" id="amount"
-                                     maxlength="10" name="amount">
-                          </div>
-                          <div class="col-md-6">
-                              <label for="date">Date</label>
-                              <input type="date" class="form-control text-dark bg-light" id="date"
-                                     name="date">
-                          </div>
-                      </div>
-
-                      <div class="row mt-3">
-                          <div class="col-md-12">
-                              <label for="description">Description:</label>
-                              <textarea name="description" class="form-control text-dark bg-light"
-                                        id="description" placeholder="Max. 500 characters"></textarea>
-                          </div>
-                      </div>
-                     
-
-                      <div class="row mt-5">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
-                          <div class="d-flex">
-                            <button class="btn save_btn rounded-pill text-white w-50 my-4 mx-3"
-                            type="submit" data-dismiss="modal" id="paySave">Edit
-                            </button> 
-                            
-                            <input class="btn close btn save_btn rounded-pill text-white w-50 my-4" type="reset" value="Reset">
-                          </div>
-                        </div>
-                        <div class="col-md-4"></div>
-                     
-                      
-                      </div>
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
-
-<!-- end -->
-
-
-            
-            <div class="card-body">
+<div class="card-body">
              <h6>Transactions</h6>
               <div id="Template" class="print-only page tabcontent ">
                 <div class="row extra-info pt-3">
@@ -921,7 +842,30 @@ location.reload();
                               <td  style="text-align: center;" >{{b.type}}</td>
                               <td  style="text-align: center;">{{b.name}}</td>
                               <td  style="text-align: center;">{{ b.date }}</td>
+                              <!-- <td  style="text-align: center;">{{ b.amount }}</td> -->
+                              {% if b.type == 'Bank To Cash Transfer' %}
+                              <td  style="text-align: center;">-{{ b.amount }}</td>
+                              {% elif b.type == 'Cash To Bank Transfer' %}
                               <td  style="text-align: center;">{{ b.amount }}</td>
+                              {% elif b.type == 'Adjust Bank Balance' %}
+                                {% if b.adjtype == 'Reduce Balance' %}
+                                    <td style="text-align: center;">-{{b.amount}}</td>
+                                {% else %}
+                                    <td style="text-align: center;">{{ b.amount}}</td>
+                                {% endif %}
+                              {% elif b.type ==  'Bank To Bank Transfer ' %}
+                              
+                                {% if "To: " in b.name %}
+                                <td style="text-align: center;">{{ b.amount }}</td>
+                                {% elif "From: " in b.name %}
+                                <td style="text-align: center;">-{{ b.amount }}</td>
+                                {% else %}
+                                <td style="text-align: center;">{{ b.amount }}</td>
+                                 {% endif %}
+                            
+                              {% else %}
+                              <td  style="text-align: center;">{{ b.amount }}</td>
+                              {% endif %}
                               <td  style="text-align: center;">{{ b.balance }}</td>
                               
                               </tr>
@@ -960,7 +904,33 @@ location.reload();
                         
                         
                           <td  class="text-white">{{ b.date }}</td>
-                          <td  class="text-white">&#8377;{{ b.amount }}</td>
+                          <!-- <td  class="text-white">&#8377;{{ b.amount }}</td> -->
+                          {% if b.type == 'Bank To Cash Transfer' %}
+                              <td  style="text-align: center;">&#8377;-{{ b.amount }}</td>
+                              {% elif b.type == 'Cash To Bank Transfer' %}
+                              <td  style="text-align: center;">&#8377;{{ b.amount }}</td>
+                              {% elif b.type == 'Adjust Bank Balance' %}
+                                {% if b.adjtype == 'Reduce Balance' %}
+                                    <td style="text-align: center;">&#8377;-{{b.amount}}</td>
+                                {% else %}
+                                    <td style="text-align: center;">&#8377;{{ b.amount}}</td>
+                                {% endif %}
+                              {% elif b.type ==  'Bank To Bank Transfer ' %}
+                              
+                                {% if "To: " in b.name %}
+                                <td style="text-align: center;">&#8377;{{ b.amount }}</td>
+                                {% elif "From: " in b.name %}
+                                <td style="text-align: center;">&#8377;-{{ b.amount }}</td>
+                                {% else %}
+                                <td style="text-align: center;">&#8377;{{ b.amount }}</td>
+                                 {% endif %}
+                            
+                              {% else %}
+                              <td  style="text-align: center;">&#8377;{{ b.amount }}</td>
+                              {% endif %}
+                            
+                              
+                            
                           <td>
                             {% with valid_types="Bank To Cash Transfer,Cash To Bank Transfer,Bank To Bank Transfer,Adjust Bank Balance" %}
                                 {% if b.type in valid_types %}
@@ -984,6 +954,78 @@ location.reload();
                         
                         
                           </tr>
+{% if b.type == 'Bank To Cash Transfer' %}
+   
+    <div class="modal fade" id="editModal{{ b.id }}">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+                <div class="modal-header " style="background: rgb(32, 35, 37);">
+                    <h3 class="m-3 text-uppercase">Bank To Cash Transfer</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+                <div class="modal-body" style="background: rgb(32, 35, 37);">
+                    <div class="card p-3 m-3">
+                        <form action="{% url 'edit_banktocash' b.id %}" method="post" class="needs-validation" novalidate
+                            autocomplete="off" id="bankToCashForm">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="fromBb">From</label>
+                                     <select class="form-control text-dark bg-light form-select" id="fromBb" name="fromBb">
+                                        <option value="">-- Select a Bank --</option>
+                                        {% for banks in banks_list %}
+                                        <option value="{{ banks.id}}" {% if banks.name == b.fromB %}selected{% endif %}>{{banks.name }}</option>
+
+                                        {% endfor %}
+                                    </select>
+                                    
+                                   
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="toB">To</label>
+                                    <input type="text" class="form-control text-dark bg-light" id="toBb" maxlength="10"
+                                        name="toB" value="Cash" readonly>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="amount">Amount</label>
+                                    <input type="number" class="form-control text-dark bg-light" id="amountt" maxlength="10"
+                                        name="amount" value="{{ b.amount}}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="date">Date</label>
+                                    <input type="date" class="form-control text-dark bg-light" id="datee" name="datee"
+                                        value="{{ b.date|date:'Y-m-d' }}">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label for="description">Description:</label>
+                                    <textarea name="description" class="form-control text-dark bg-light" id="descriptionn"
+                                        placeholder="Max. 500 characters">{{ b.description }}</textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div class="d-flex">
+                                        <input class="btn save_btn rounded-pill text-white w-50 my-4 mx-3" type="submit"
+                                           value="Edit">
+                                        <input class="btn close btn save_btn rounded-pill text-white w-50 my-4" type="reset"
+                                            value="Reset">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+{% endif %}
+                          
                           {%endfor%}
                       </tbody>
                   </table> 
