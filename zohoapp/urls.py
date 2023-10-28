@@ -512,8 +512,12 @@ urlpatterns = [
     path('bank_pdf/<int:id>/', views.bank_pdf, name='bank_pdf'),
     path('bank_status/<int:id>/', views.bank_status, name='bank_status'),
     path('check_duplicate_bank/', views.check_duplicate_bank, name='check_duplicate_bank'),#new
-    path('edit_banktocash/<int:id>', views.edit_banktocash, name='edit_banktocash'),
-    # ###############################################################################################3
+    path('edit_banktocash/<int:id>', views.edit_banktocash, name='edit_banktocash'),#new
+    path('edit_cashtobank/<int:id>', views.edit_cashtobank, name='edit_cashtobank'),#new
+    path('edit_adjustbankbalance/<int:id>', views.edit_adjustbankbalance, name='edit_adjustbankbalance'),#new
+    path('edit_bank_to_bank_transfer/<int:id>', views.edit_bank_to_bank_transfer, name='edit_bank_to_bank_transfer'),#new
+
+    # ###############################################################################################
     path('load_balance_sheet/',views.load_balance_sheet,name='load_balance_sheet'),
     path('load_horizontal_balance_sheet/',views.load_horizontal_balance_sheet,name='load_horizontal_balance_sheet'),
     path('load_customize_report_bs/',views.load_customize_report_bs,name='load_customize_report_bs'),
