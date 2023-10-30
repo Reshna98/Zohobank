@@ -11803,13 +11803,14 @@ def edit_bank_to_bank_transfer(request, id):
         toB = request.POST.get('toB')
         amount = float(request.POST.get('amount', 0.0))
         description = request.POST.get('description')
-
-        # Get the source transaction
-        from_transaction = transactions.objects.get(id=id, type='Bank To Bank Transfer')
-
-        # Get the source and destination bank accounts
+           # Get the source and destination bank accounts
         from_bank = Bankcreation.objects.get(id=fromB)
         to_bank = Bankcreation.objects.get(id=toB)
+
+        # Get the source transaction
+        from_transaction = transactions.objects.get(id=id, type='Bank To Bank Transfer', )
+
+      
 
         # Restore the previous balance by reversing the previous transaction
         from_bank.balance += from_transaction.amount
@@ -11831,13 +11832,13 @@ def edit_bank_to_bank_transfer(request, id):
         from_transaction.toB = to_bank.name # Update with the primary key
         from_transaction.amount = amount
         from_transaction.description = description
-        from_transaction.balance = from_bank.balance
+        from_transaction.balance = to_bank.balance
 
         # Update the source transaction
         from_transaction.save()
 
         # Get the destination transaction
-        to_transaction = transactions.objects.get(id=id, type='Bank To Bank Transfer')
+        to_transaction = transactions.objects.get(id=id, type='Bank To Bank Transfer', )
 
         # Update the destination transaction fields with the new data
         to_transaction.date = date
@@ -11845,7 +11846,7 @@ def edit_bank_to_bank_transfer(request, id):
         to_transaction.toB = to_bank.name 
         to_transaction.amount = amount
         to_transaction.description = description
-        to_transaction.balance = to_bank.balance
+        to_transaction.balance = from_bank.balance
 
         # Update the destination transaction
         to_transaction.save()
@@ -11857,6 +11858,7 @@ def edit_bank_to_bank_transfer(request, id):
         b = Bankcreation.objects.filter(user=request.user)
         cp = company_details.objects.get(user=request.user)
         return render(request, 'banklistout.html', {'company': cp, 'bank': b})
+
 
 
 
