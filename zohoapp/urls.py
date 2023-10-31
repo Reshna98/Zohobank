@@ -516,7 +516,9 @@ urlpatterns = [
     path('edit_cashtobank/<int:id>', views.edit_cashtobank, name='edit_cashtobank'),#new
     path('edit_adjustbankbalance/<int:id>', views.edit_adjustbankbalance, name='edit_adjustbankbalance'),#new
     path('edit_bank_to_bank_transfer/<int:id>', views.edit_bank_to_bank_transfer, name='edit_bank_to_bank_transfer'),#new
-
+    path('delete_transaction/<int:id>/', views.delete_transaction, name='delete_transaction'),#new
+    path('active_banks/', views.active_banks, name='active_banks'),#new
+    path('inactive_banks/', views.inactive_banks, name='inactive_banks'),#new
     # ###############################################################################################
     path('load_balance_sheet/',views.load_balance_sheet,name='load_balance_sheet'),
     path('load_horizontal_balance_sheet/',views.load_horizontal_balance_sheet,name='load_horizontal_balance_sheet'),

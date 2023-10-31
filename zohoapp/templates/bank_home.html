@@ -101,33 +101,48 @@
                 </div>
             </div>
         </div>
-        <div class="card radius-15 mb-5">
+        <!-- <div class="card radius-15 mb-5">
             <div class="card-body">
                 <div class="row">
-                    <div class=" col-md-3">
-                    
+                   
+                    <div class="col-md-4">
+                        <div class="input-group">
                        
                             <input type="text" id="search" placeholder="Search..." class="form-control text-dark bg-light" autocomplete="off">
                        
                         
 
                     </div>
+                    <div class="input-group-append">
+                        <a class="btn btn-outline-primary" href="" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="margin-left: -200px; color: rgb(240, 240, 10);"
+                        role="button"> SORT <i class="fa fa-sort"></i>
+                        </a>
+                        <div class="dropdown-menu" id="filterMenu">
+                       
+                            <a class="dropdown-item" href="#" data-sort="name">Sort by Name</a>
+                            <a class="dropdown-item" href="#" data-sort="salary">Sort by Opening Balance</a>
+                                    
+                        </div>
+                    </div>
+                    </div>
                     
                     <div class="col-md-5"></div>
-                    <div class="col-md-4 d-flex justify-content-end align-items-start gap-1">
+                    <div class="col-md-4 d-flex justify-content-end align-items-start gap-1"> -->
                         <!-- <a href="{%url 'create_bank'%}" class="btn fa fa-plus text-right px-3 py-2" role="button">
                             <span class="mt-2">&nbsp;&nbsp;NEW</span>
                         </a>  -->
 
                     <!-- </div>
                     <div class="col-md-2"> -->
-                        <a class="btn text-center " data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        <!-- <a class="btn text-center " data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         role="button"><i class="fa fa-filter mt-1 mx-4"></i>
                         </a>
                         <div class="dropdown-menu ">
-                            <a class="dropdown-item" href="{% url 'bank_home'  %}">All</a>
-                            <a class="dropdown-item" href="{% url 'nameasc'  %}">Name A-Z</a>
-                            <a class="dropdown-item" href="{% url 'namedes'  %}">Name Z-A</a>
+                            <a class="dropdown-item" href="{% url 'bank_home'  %}">All</a> -->
+                            <!-- <a class="dropdown-item" href="{% url 'nameasc'  %}">Name A-Z</a>
+                            <a class="dropdown-item" href="{% url 'namedes'  %}">Name Z-A</a> -->
+                            <!-- <a class="dropdown-item" href="{% url 'active_banks'  %}">Active</a>
+                            <a class="dropdown-item" href="{% url 'inactive_banks'  %}">Inactive</a>
                            
 
                         </div>
@@ -136,7 +151,47 @@
                         </a> 
                     </div>
 
+                </div> -->
+                <div class="card radius-15 mb-5">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text"  id="search" class="form-control text-dark bg-light"
+                                        placeholder="Search here..." autocomplete="off">
+                                    <div class="input-group-append">.
+                                        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-sort-amount-up"></i> Sort
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="sortDropdownMenu">
+                                            <a class="dropdown-item" href="#" onclick="sortTable(2)">All</a>
+                                            <a class="dropdown-item" href="#" onclick="sortTable(3)">Creditnote No</a>
+                                            <a class="dropdown-item" href="#" onclick="sortTable(4)">Amount</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5"></div>
+                <div class="col-md-3">
+                    <a class="btn text-center " data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    role="button"><i class="fa fa-filter mt-1 mx-4"></i>
+                    </a>
+                    <div class="dropdown-menu ">
+                        <a class="dropdown-item" href="{% url 'bank_home'  %}">All</a>
+                        <a class="dropdown-item" href="{% url 'active_banks'  %}">Active</a>
+                        <a class="dropdown-item" href="{% url 'inactive_banks'  %}">Inactive</a>
+                       
+
+                    </div>
+
+                    <a href="{%url 'create_bank'%}" class="btn fa fa-plus text-right px-3 py-2" role="button">
+                        <span class="mt-2">&nbsp;&nbsp;NEW</span>
+                    </a> 
                 </div>
+            </div>
+        </div>
+    </div>
+
                 <hr>
                 <div class="container-fluid">
                     <table class="table table-responsive-md mt-4" id="table">
